@@ -74,7 +74,7 @@ value = 11.0
 
 [node name="LabelAssumptions" type="RichTextLabel" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Three Assumptions that hold true in most RL applications.
+text = "Three Assumptions that hold true in most practical TSP applications.
 1. Complete Graph (An Edge exists between every Pair of Vertices)
 2. Symmetric TSP (Distance from Vertex A to B is the same length as Vertex B to A)
 3. Triangle Inequality (0 -> 3 always less than 0 -> 2 -> 3)"

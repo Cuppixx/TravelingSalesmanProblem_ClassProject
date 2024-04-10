@@ -181,13 +181,35 @@ func _solve_tsp_brute_force() -> Array:
 	#print("Routes num: ",holdvalue / 2,"\n")
 	#return holdvalue / 2
 
-func _solve_tsp_nearest_neighbor() -> Array:
 
-	return []
 
+func _solve_tsp_nearest_neighbor() -> Array: return _recursive_nearest_neighbor([],[],0,0)
+
+func _recursive_nearest_neighbor(vertex_visited:Array,route:Array,start_vertex:int,current_vertex:int) -> Array:
+	# Mark current vertex as visited
+	vertex_visited.append(current_vertex)
+	print("Visited ",vertex_visited)
+	# Add current vertex to route
+	route.append(current_vertex)
+	print("Route ",route)
+	# Get edge weight array from cuurent vertex to other vertices
+	var current_edge_array:Array = edge_weight_matrix[current_vertex].duplicate()
+	print("Current Edgeweights ",current_edge_array)
+	# Make all edge weight based on vertices visited INF
+	for visited_vertex in vertex_visited: current_edge_array[visited_vertex] = INF
+	print("Current Edgeweights ",current_edge_array)
+	# get nn from verticies
+	if current_edge_array.min() < INF:
+		var nearest_neightbor:float = current_edge_array.min()
+		var next_vertex:int = current_edge_array.find(nearest_neightbor)
+		print("Found available vertex / edge to travel to:", next_vertex)
+		if not vertex_visited.has(next_vertex):
+			_recursive_nearest_neighbor(vertex_visited,route,start_vertex,next_vertex)
+	else: route.append(start_vertex)
+
+	return route
 
 # GUI Signals
-
 func _on_btn_create_graph_pressed() -> void: _create_graph()
 
 func _on_spin_box_graph_changed(value: float) -> void:
