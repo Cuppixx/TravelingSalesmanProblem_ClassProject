@@ -50,6 +50,7 @@ func _create_graph() -> void:
 	for vertex in current_graph.get_children(true):
 		vertex.free()
 
+	var index:int = 0
 	var generated_positions = []
 	for x in graph_size:
 		var valid_position:bool = false
@@ -70,6 +71,9 @@ func _create_graph() -> void:
 		# Create vertex instance and add to the graph
 		var vertex_instance:Vertex = VERTEX.instantiate()
 		vertex_instance.position = new_position
+		var vertex_index:Label = vertex_instance.get_child(0).get_child(0)
+		vertex_index.text = str(index)
+		index += 1
 		current_graph.add_child(vertex_instance)
 
 	# Build EdgeWeightMatrix
@@ -82,12 +86,13 @@ func _create_graph() -> void:
 	for i in range(graph_size):
 		for j in range(graph_size):
 			# Vertex position for edge origin, parent of the edge node
-			var vertex_origin_pos:Vector2 = current_graph.get_child(i-1).position
+			var vertex_origin_pos:Vector2 = current_graph.get_child(i).position
 			# Vertex position for edge destination,
 			# pos targeted by the edge
-			var vertex_destin_pos:Vector2 = current_graph.get_child(j-1).position
+			var vertex_destin_pos:Vector2 = current_graph.get_child(j).position
 
-			var edge_weight = vertex_origin_pos.distance_to(vertex_destin_pos)/10
+			var edge_weight = snappedf((vertex_origin_pos.distance_to(vertex_destin_pos))/10,0.01)
+			print("From ",vertex_origin_pos," to ",vertex_destin_pos," are ",edge_weight)
 			edge_weight_matrix[i][j] = edge_weight
 
 	# Creating visual edges
@@ -96,6 +101,12 @@ func _create_graph() -> void:
 			var edge_instance = EDGE.instantiate()
 			edge_instance.add_point(current_graph.get_child(i).position + Vector2.ONE * 50)
 			edge_instance.add_point(current_graph.get_child(j).position + Vector2.ONE * 50)
+
+			var edge_label:Label = edge_instance.get_child(0)
+			edge_label.position = Vector2((current_graph.get_child(i).position.x + current_graph.get_child(j).position.x + 100)/2,(current_graph.get_child(i).position.y + current_graph.get_child(j).position.y + 100)/2)
+
+			edge_label.text = str(edge_weight_matrix[i][j])
+			edge_label.position.x -= edge_label.text.length() * 2
 			current_graph.add_child(edge_instance)
 
 
@@ -110,13 +121,13 @@ func _create_graph() -> void:
 
 
 #var routes:Array = []
-func _solve_tsp_brute_force() -> Array: return []
-	#for i in range(len(edge_weight_matrix)):
-		#for j in range(len(edge_weight_matrix[i])):
-			#print("From: "+str(i)+" to: "+str(j)+" weight of: "+str(edge_weight_matrix[i][j]))
-		#print()
-	#print(edge_weight_matrix,"\n")
-#
+func _solve_tsp_brute_force() -> Array:
+	for i in range(len(edge_weight_matrix)):
+		for j in range(len(edge_weight_matrix[i])):
+			print("From: "+str(i)+" to: "+str(j)+" weight of: "+str(edge_weight_matrix[i][j]))
+		print()
+	print(edge_weight_matrix,"\n")
+	return []
 	#for i in range(factorial(len(edge_weight_matrix))):
 		#routes.append([])
 		#for j in range(len(edge_weight_matrix)-1):

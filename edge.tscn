@@ -8,5 +8,10 @@ default_color = Color(0, 0.513726, 0.709804, 0.784314)
 antialiased = true
 
 [node name="Label" type="Label" parent="."]
+z_index = 1
 offset_right = 40.0
 offset_bottom = 23.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.345098, 0.223529, 0.286275, 1)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 20
