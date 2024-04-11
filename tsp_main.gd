@@ -215,17 +215,22 @@ func _recursive_greedy_heuristic(edge_matrix:Array,vertex_visited:Array,vertex_v
 	var minimum_edge:float = INF
 	var minimum_edge_pair:Vector2 = Vector2.INF
 
+	var valid_edge_found:bool = false
 	for i in range(len(edge_matrix)):
 		if not vertex_visited2.has(float(i)):
 			for j in range(len(edge_matrix)):
 				if not vertex_visited2.has(float(j)):
 					if i != j:
 						if edge_matrix[i][j] < minimum_edge:
-							print(i,",",j)
-							minimum_edge = edge_matrix[i][j]
-							minimum_edge_pair = Vector2(i,j)
+							var route_copy:Array = route.duplicate()
+							route_copy.append(Vector2(i,j))
+							if _creates_sub_circle(route_copy) == false:
+								print(i,",",j)
+								minimum_edge = edge_matrix[i][j]
+								minimum_edge_pair = Vector2(i,j)
+								valid_edge_found = true
 
-	if not minimum_edge_pair == Vector2.INF:
+	if valid_edge_found:
 		edge_matrix[minimum_edge_pair.x][minimum_edge_pair.y] = INF
 		edge_matrix[minimum_edge_pair.y][minimum_edge_pair.x] = INF
 		route.append(minimum_edge_pair)
@@ -236,22 +241,49 @@ func _recursive_greedy_heuristic(edge_matrix:Array,vertex_visited:Array,vertex_v
 		if not vertex_visited.has(minimum_edge_pair.y): vertex_visited.append(minimum_edge_pair.y)
 		elif not vertex_visited2.has(minimum_edge_pair.y): vertex_visited2.append(minimum_edge_pair.y)
 
-	print("Current Edge: ",minimum_edge_pair)
-	print("Vertex Visited 1: ",vertex_visited)
-	print("Vertex Visited 2: ",vertex_visited2)
-	print("Edge Matrix: ",edge_matrix)
-	print("Route: ",route)
-	print("\n")
+		print("Current Edge: ",minimum_edge_pair)
+		print("Vertex Visited 1: ",vertex_visited)
+		print("Vertex Visited 2: ",vertex_visited2)
+		print("Edge Matrix: ",edge_matrix)
+		print("Route: ",route)
+		print("\n")
 
-	if not minimum_edge_pair == Vector2.INF:
-		print("NEXT RUN")
 		for i in range(len(edge_matrix)):
 				for j in range(len(edge_matrix)):
 					if edge_matrix[i][j] != INF and i != j:
 						_recursive_greedy_heuristic(edge_matrix,vertex_visited,vertex_visited2,route)
-	else: pass
 
 	return route
+
+func _creates_sub_circle(route:Array) -> bool:
+	print("Checking for subcircle... on route: ",route)
+	if len(route) == len(edge_weight_matrix) or len(route) < 3:
+		print("No subcircle bc route has full edges or less than 3 edges! Returning false")
+		return false
+	if len(route) < len(edge_weight_matrix):
+		for i in len(route):
+			var route_copy:Array = route.duplicate()
+			var vertices:Array = []
+			vertices.append(route_copy[i].x)
+			vertices.append(route_copy[i].y)
+			route_copy.pop_at(i)
+			while not route_copy.is_empty():
+				var edge_to_pop:Vector2 = Vector2.INF
+				var connections:int = 0
+				for edge in route_copy:
+					if edge.x == vertices.back() or edge.y == vertices.back():
+						if not vertices.has(edge.x): vertices.append(edge.x)
+						else: connections += 1
+						if not vertices.has(edge.y): vertices.append(edge.y)
+						else: connections += 1
+						if connections == 2:
+							print("Two connections found, assume subcircle")
+							return true
+						edge_to_pop = edge
+					connections = 0
+				route_copy.pop_at(route_copy.find(edge_to_pop))
+
+	return false
 
 # GUI Signals
 func _on_btn_create_graph_pressed() -> void: _create_graph()
