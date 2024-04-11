@@ -191,3 +191,4 @@ grow_vertical = 2
 [connection signal="value_changed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/SpinBoxSeed" to="." method="_on_spin_box_seed_changed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnBruteForce" to="." method="_on_btn_brute_force_pressed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnNearestNeighbor" to="." method="_on_btn_nearest_neighbor_pressed"]
+[connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnGreedyHeuristic" to="." method="_on_btn_greedy_heuristic_pressed"]

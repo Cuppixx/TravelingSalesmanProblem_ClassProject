@@ -209,6 +209,50 @@ func _recursive_nearest_neighbor(vertex_visited:Array,route:Array,start_vertex:i
 
 	return route
 
+func _solve_tsp_greedy_heuristic() -> Array: return _recursive_greedy_heuristic(edge_weight_matrix.duplicate(),[],[],[])
+
+func _recursive_greedy_heuristic(edge_matrix:Array,vertex_visited:Array,vertex_visited2:Array,route:Array) -> Array:
+	var minimum_edge:float = INF
+	var minimum_edge_pair:Vector2 = Vector2.INF
+
+	for i in range(len(edge_matrix)):
+		if not vertex_visited2.has(float(i)):
+			for j in range(len(edge_matrix)):
+				if not vertex_visited2.has(float(j)):
+					if i != j:
+						if edge_matrix[i][j] < minimum_edge:
+							print(i,",",j)
+							minimum_edge = edge_matrix[i][j]
+							minimum_edge_pair = Vector2(i,j)
+
+	if not minimum_edge_pair == Vector2.INF:
+		edge_matrix[minimum_edge_pair.x][minimum_edge_pair.y] = INF
+		edge_matrix[minimum_edge_pair.y][minimum_edge_pair.x] = INF
+		route.append(minimum_edge_pair)
+
+		if not vertex_visited.has(minimum_edge_pair.x): vertex_visited.append(minimum_edge_pair.x)
+		elif not vertex_visited2.has(minimum_edge_pair.x): vertex_visited2.append(minimum_edge_pair.x)
+
+		if not vertex_visited.has(minimum_edge_pair.y): vertex_visited.append(minimum_edge_pair.y)
+		elif not vertex_visited2.has(minimum_edge_pair.y): vertex_visited2.append(minimum_edge_pair.y)
+
+	print("Current Edge: ",minimum_edge_pair)
+	print("Vertex Visited 1: ",vertex_visited)
+	print("Vertex Visited 2: ",vertex_visited2)
+	print("Edge Matrix: ",edge_matrix)
+	print("Route: ",route)
+	print("\n")
+
+	if not minimum_edge_pair == Vector2.INF:
+		print("NEXT RUN")
+		for i in range(len(edge_matrix)):
+				for j in range(len(edge_matrix)):
+					if edge_matrix[i][j] != INF and i != j:
+						_recursive_greedy_heuristic(edge_matrix,vertex_visited,vertex_visited2,route)
+	else: pass
+
+	return route
+
 # GUI Signals
 func _on_btn_create_graph_pressed() -> void: _create_graph()
 
@@ -222,3 +266,4 @@ func _on_spin_box_seed_changed(value: float) -> void: custom_seed = int(value)
 
 func _on_btn_brute_force_pressed() -> void: print(_solve_tsp_brute_force())
 func _on_btn_nearest_neighbor_pressed() -> void: print(_solve_tsp_nearest_neighbor())
+func _on_btn_greedy_heuristic_pressed() -> void: print(_solve_tsp_greedy_heuristic())
