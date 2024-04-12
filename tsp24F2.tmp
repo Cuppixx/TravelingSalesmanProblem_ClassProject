@@ -103,13 +103,6 @@ scroll_active = false
 [node name="HSeparator3" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="BtnHandSolving" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Manual Solving"
-
-[node name="HSeparator4" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
 [node name="BtnBruteForce" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Brute Force Algorithm (Naive Brute Force) "
@@ -122,14 +115,14 @@ text = "Brute Force Algorithm (Branch and Bound Brute Force) "
 layout_mode = 2
 text = "Held-Karp Algorithm (Branch and Bound Brute Force and Dynamic Programming) "
 
-[node name="HSeparator5" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
+[node name="HSeparator4" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="BtnNearestNeighbor" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Nearest Neighbor Algorithm (Nearest Neighbor Heuristic)"
 
-[node name="HSeparator6" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
+[node name="HSeparator5" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="BtnGreedyHeuristic" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
@@ -140,7 +133,7 @@ text = "Greedy Algorithm (Greedy Heuristic)"
 layout_mode = 2
 text = "Greedy Algorithm [Variation] (Greedy Heuristic)"
 
-[node name="HSeparator7" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
+[node name="HSeparator6" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="BtnMinimumSpanningTree" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
@@ -151,7 +144,7 @@ text = "Create Minimum Spanning Tree (Prim's Algorithm (Greedy Heuristic))"
 layout_mode = 2
 text = "Create 1-Tree (Prim's Algorithm [Variation] (Greedy Heuristic))"
 
-[node name="HSeparator8" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
+[node name="HSeparator7" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="BtnChristofidesMethod" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
@@ -162,7 +155,7 @@ text = "Christofides Algorithm (Constructive Heuristic(Greedy Heuristic + Local 
 layout_mode = 2
 text = "Lin-Kernighan Algorithm (Constructive Heuristic(Greedy Heuristic + Local Search Methods))"
 
-[node name="HSeparator9" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
+[node name="HSeparator8" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="BtnLocalSearchRandomSwapping" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
@@ -177,7 +170,7 @@ text = "Local Search: 2-Opt"
 layout_mode = 2
 text = "Local Search: 3-Opt"
 
-[node name="HSeparator10" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
+[node name="HSeparator9" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="BtnSimulatedAnnealing" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
@@ -254,7 +247,6 @@ grow_vertical = 2
 [connection signal="value_changed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/SpinBoxSeed" to="." method="_on_spin_box_seed_changed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/VisibilityEdgeweight" to="." method="_on_visibility_edgeweight_pressed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/VisibilityEdge" to="." method="_on_visibility_edge_pressed"]
-[connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnHandSolving" to="." method="_on_btn_hand_solving_pressed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnBruteForce" to="." method="_on_btn_brute_force_pressed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnNearestNeighbor" to="." method="_on_btn_nearest_neighbor_pressed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnGreedyHeuristic" to="." method="_on_btn_greedy_heuristic_pressed"]

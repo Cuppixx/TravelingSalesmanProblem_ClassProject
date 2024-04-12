@@ -80,8 +80,7 @@ func _create_graph() -> void:
 		# Create vertex instance and add to the graph
 		var vertex_instance:Vertex = VERTEX.instantiate()
 		vertex_instance.position = new_position
-		var vertex_index:Label = vertex_instance.get_child(0).get_child(0)
-		vertex_index.text = str(index)
+		vertex_instance.index = index
 		index += 1
 		current_graph.add_child(vertex_instance)
 
@@ -129,6 +128,18 @@ func _color_edge(edge:Vector2) -> void:
 				child.get_child(0).get_child(0).color = Color.FOREST_GREEN
 
 #region _solve_tsp functions
+func _solve_tsp_manual() -> void:
+	var tour:Array = []
+	var start_index:int = 0
+	SignalEventBus.hs_added_vertex.connect(func(vertex_idx:int) -> void:
+		if tour.is_empty(): start_index = vertex_idx
+		else: start_index = tour.front()
+		if not tour.has(vertex_idx): tour.append(vertex_idx)
+		else: if tour.has(vertex_idx) and vertex_idx == start_index: tour.append(vertex_idx)
+		if len(tour) > 1: _color_edge(Vector2(tour[len(tour)-2],tour[len(tour)-1]))
+		if debug_print: print("Hand Solving Tour: ",tour)
+		if debug_print: print("Start Vertex: ",start_index)
+	)
 # Brute Force Methods
 func _solve_tsp_brute_force(algorithm:int) -> Array:
 	match algorithm:
@@ -143,7 +154,7 @@ func _solve_tsp_nearest_neighbor_heuristic() -> Array: return _recursive_nearest
 # Greedy Heuristics
 func _solve_tsp_greedy_heuristic(algorithm:int) -> Array:
 	match algorithm:
-		0: return _recursive_greedy_heuristic()
+		0: return _recursive_greedy_heuristic(edge_weight_matrix.duplicate(),[],[],[])
 		1: return _recursive_greedy_heuristic_variation(edge_weight_matrix.duplicate(),[],[],[])
 		_: return []
 #endregion
@@ -162,9 +173,7 @@ func _recursive_nearest_neighbor(vertex_visited:Array,tour:Array,start_vertex:in
 	vertex_visited.append(current_vertex)
 	tour.append(current_vertex)
 
-	if len(tour) > 1:
-		print(Vector2(tour[len(tour)-2],tour[len(tour)-1]))
-		_color_edge(Vector2(tour[len(tour)-2],tour[len(tour)-1]))
+	if len(tour) > 1: _color_edge(Vector2(tour[len(tour)-2],tour[len(tour)-1]))
 
 	if debug_print: print("Visited: ",vertex_visited,"\nTour: ",tour)
 
@@ -191,7 +200,50 @@ func _recursive_nearest_neighbor(vertex_visited:Array,tour:Array,start_vertex:in
 	return tour
 #endregion
 #region Greedy Algorithms
-func _recursive_greedy_heuristic() -> Array: return []
+func _recursive_greedy_heuristic(edge_matrix:Array,vertex_visited1:Array,vertex_visited2:Array,tour:Array) -> Array:
+	var minimum_edge:float = INF
+	var minimum_edge_pair:Vector2 = Vector2.INF
+
+	var valid_edge_found:bool = false
+	for i in range(len(edge_matrix)):
+		if not vertex_visited2.has(float(i)):
+			for j in range(len(edge_matrix)):
+				if not vertex_visited2.has(float(j)):
+					if i != j:
+						if edge_matrix[i][j] < minimum_edge:
+							var tour_copy:Array = tour.duplicate()
+							tour_copy.append(Vector2(i,j))
+							if _creates_invalid_cycle(tour_copy) == false:
+								minimum_edge = edge_matrix[i][j]
+								minimum_edge_pair = Vector2(i,j)
+								valid_edge_found = true
+
+	if valid_edge_found:
+		edge_matrix[minimum_edge_pair.x][minimum_edge_pair.y] = INF
+		edge_matrix[minimum_edge_pair.y][minimum_edge_pair.x] = INF
+		tour.append(minimum_edge_pair)
+		_color_edge(minimum_edge_pair)
+
+		if not vertex_visited1.has(minimum_edge_pair.x): vertex_visited1.append(minimum_edge_pair.x)
+		elif not vertex_visited2.has(minimum_edge_pair.x): vertex_visited2.append(minimum_edge_pair.x)
+
+		if not vertex_visited1.has(minimum_edge_pair.y): vertex_visited1.append(minimum_edge_pair.y)
+		elif not vertex_visited2.has(minimum_edge_pair.y): vertex_visited2.append(minimum_edge_pair.y)
+
+		if debug_print:
+			print("Current Edge: ",minimum_edge_pair)
+			print("Vertex Visited 1: ",vertex_visited1)
+			print("Vertex Visited 2: ",vertex_visited2)
+			print("Edge Matrix: ",edge_matrix)
+			print("Tour: ",tour)
+			print("\n")
+
+		for i in range(len(edge_matrix)):
+				for j in range(len(edge_matrix)):
+					if edge_matrix[i][j] != INF and i != j:
+						_recursive_greedy_heuristic_variation(edge_matrix,vertex_visited1,vertex_visited2,tour)
+
+	return tour
 
 #region _recursive_greedy_heuristic_variation
 func _recursive_greedy_heuristic_variation(edge_matrix:Array,vertex_visited1:Array,vertex_visited2:Array,tour:Array) -> Array:
@@ -286,8 +338,13 @@ func _on_spin_box_seed_changed(value: float) -> void: custom_seed = int(value)
 func _on_visibility_edgeweight_pressed() -> void: SignalEventBus.emit_signal("toggle_edgeweight_visibility")
 func _on_visibility_edge_pressed() -> void: SignalEventBus.emit_signal("toggle_none_tour_edges")
 
+func _on_btn_hand_solving_pressed() -> void:
+	SignalEventBus.emit_signal("hand_solving")
+	_solve_tsp_manual()
 func _on_btn_brute_force_pressed() -> void: print(_solve_tsp_brute_force(0))
 func _on_btn_nearest_neighbor_pressed() -> void: print(_solve_tsp_nearest_neighbor_heuristic())
 func _on_btn_greedy_heuristic_pressed() -> void: print(_solve_tsp_greedy_heuristic(0))
 func _on_btn_greedy_heuristic_variation_pressed() -> void: print(_solve_tsp_greedy_heuristic(1))
 #endregion
+
+
