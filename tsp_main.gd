@@ -161,7 +161,66 @@ func _solve_tsp_greedy_heuristic(algorithm:int) -> Array:
 
 #region Algorithm functions
 #region Brute Force Algorithms
-func _recursive_brute_force_naive() -> Array: return []
+func _recursive_brute_force_naive() -> Array:
+	var arr = []
+	for i in range(graph_size):
+		arr.append(i)
+	var permuations_arr = permutations(arr)
+	for i in range(len(permuations_arr)):
+		permuations_arr[i].append(permuations_arr[i].front())
+	print(permuations_arr)
+
+	var final_sum = INF
+	for i in range(len(permuations_arr)):
+		var sum = 0
+		for j in range(len(permuations_arr[i])):
+			if j != permuations_arr[i].size()-1:
+				var edge_weight_value = edge_weight_matrix[permuations_arr[i][j]][permuations_arr[i][j+1]]
+				sum += edge_weight_value
+		if sum < final_sum:
+			final_sum = sum
+			print("New Minimum:",permuations_arr[i]," Value:",final_sum)
+
+	return []
+
+func permutations(array,permuations_array = [],start=0):
+	var n = array.size()
+
+	if start == n - 1:
+		permuations_array.append(array.duplicate())
+	else:
+		for i in range(start, n):
+			# Swap elements at indices start and i
+			var temp
+			temp = array[start]
+			array[start] = array[i]
+			array[i] = temp
+
+			# Recursively generate permutations for the rest of the array
+			permutations(array,permuations_array,start + 1)
+
+			# Swap back elements to backtrack
+			temp = array[start]
+			array[start] = array[i]
+			array[i] = temp
+
+	if permuations_array.size() == factorial(array.size()):
+		return permuations_array
+
+func factorial(n):
+	var holdvalue = 0
+	var boolis = true
+	if n == 0 or n == 1:
+		holdvalue = 1
+	else:
+		while n > 0:
+			if boolis:
+				boolis = false
+				holdvalue = n
+			else:
+				holdvalue = holdvalue * n
+			n = n-1
+	return holdvalue
 
 func _recursive_brute_force_branch_and_bound() -> Array: return []
 
