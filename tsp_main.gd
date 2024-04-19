@@ -168,9 +168,10 @@ func _recursive_brute_force_naive() -> Array:
 	var permuations_arr = permutations(arr)
 	for i in range(len(permuations_arr)):
 		permuations_arr[i].append(permuations_arr[i].front())
-	print(permuations_arr)
+	#print(permuations_arr)
 
 	var final_sum = INF
+	var current_i
 	for i in range(len(permuations_arr)):
 		var sum = 0
 		for j in range(len(permuations_arr[i])):
@@ -179,9 +180,14 @@ func _recursive_brute_force_naive() -> Array:
 				sum += edge_weight_value
 		if sum < final_sum:
 			final_sum = sum
+			current_i = i
 			print("New Minimum:",permuations_arr[i]," Value:",final_sum)
 
-	return []
+	for j in range(len(permuations_arr[current_i])):
+		if j != permuations_arr[current_i].size()-1:
+			#print("Color:",Vector2(permuations_arr[current_i][j],permuations_arr[current_i][j+1]))
+			_color_edge(Vector2(permuations_arr[current_i][j],permuations_arr[current_i][j+1]))
+	return [permuations_arr[current_i]]
 
 func permutations(array,permuations_array = [],start=0):
 	var n = array.size()
