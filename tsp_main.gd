@@ -410,6 +410,41 @@ func _on_btn_brute_force_pressed() -> void: print(_solve_tsp_brute_force(0))
 func _on_btn_nearest_neighbor_pressed() -> void: print(_solve_tsp_nearest_neighbor_heuristic())
 func _on_btn_greedy_heuristic_pressed() -> void: print(_solve_tsp_greedy_heuristic(0))
 func _on_btn_greedy_heuristic_variation_pressed() -> void: print(_solve_tsp_greedy_heuristic(1))
+
 #endregion
-
-
+func _on_btn_local_search_2_opt_pressed():
+	var tour:Array = [3,4,1,0,2,5,7,6]
+	print("Before: ",tour)
+	for i in range(1,len(tour)):
+		var reversed_tour = _reverse_2opt_tour(i,tour.size()-1,tour)
+		var sum:int = 0
+		for j in range(len(reversed_tour)): 
+			if j < reversed_tour.size():
+				sum += edge_weight_matrix[j][j+1]
+		print("Sum: ",sum)
+	
+func _reverse_2opt_tour(vertex1:int,vertex2:int,tour:Array) -> Array:
+	var vertex1_idx:int = INF
+	var vertex2_idx:int = INF
+	vertex1_idx = tour.find(vertex1)
+	vertex2_idx = tour.find(vertex2)
+	var tour_front:Array = tour.duplicate().slice(0,vertex1_idx)
+	var tour_back:Array = tour.duplicate().slice(vertex2_idx+1,tour.size())
+	tour = tour.slice(vertex1_idx,vertex2_idx+1)
+	tour.reverse()
+	print("After: ",tour_front," -- ",tour," -- ",tour_back)
+	return tour
+	
+	
+func _on_btn_minimum_spanning_tree_pressed():
+	build_mst([],[0,1,2,3,4,5,6,7])
+	
+func build_mst(vertices_visited:Array,vertices_unvisited:Array,current_vertex:int = 0,tour:Array = []) -> Array:
+	vertices_visited.append(current_vertex)
+	vertices_unvisited.pop_at(vertices_unvisited.find(current_vertex))
+	var smallest_edge:int = INF
+	for i in vertices_visited:
+		for j in vertices_unvisited:
+			if edge_weight_matrix[i][j] < smallest_edge:
+				smallest_edge = edge_weight_matrix[i][j]
+	return []
