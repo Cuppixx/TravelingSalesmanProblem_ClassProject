@@ -116,10 +116,12 @@ text = "Brute Force Algorithm (Naive Brute Force) "
 
 [node name="BtnBruteForce2" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
+disabled = true
 text = "Brute Force Algorithm (Branch and Bound Brute Force) "
 
 [node name="BtnBruteForce3" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
+disabled = true
 text = "Held-Karp Algorithm (Branch and Bound Brute Force and Dynamic Programming) "
 
 [node name="HSeparator5" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
@@ -134,6 +136,7 @@ layout_mode = 2
 
 [node name="BtnGreedyHeuristic" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
+disabled = true
 text = "Greedy Algorithm (Greedy Heuristic)"
 
 [node name="BtnGreedyHeuristicVariation" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
@@ -175,6 +178,7 @@ text = "Local Search: 2-Opt"
 
 [node name="BtnLocalSearch3Opt" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
+disabled = true
 text = "Local Search: 3-Opt"
 
 [node name="HSeparator10" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
@@ -186,6 +190,7 @@ text = "Local Search: Simulated Annealing"
 
 [node name="BtnAntColony" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
+disabled = true
 text = "Local Search: Ant Colony"
 
 [node name="HSplitContainer" type="HSplitContainer" parent="Control/HSplitContainer"]
