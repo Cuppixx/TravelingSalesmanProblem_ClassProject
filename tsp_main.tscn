@@ -260,4 +260,5 @@ grow_vertical = 2
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnGreedyHeuristic" to="." method="_on_btn_greedy_heuristic_pressed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnGreedyHeuristicVariation" to="." method="_on_btn_greedy_heuristic_variation_pressed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnMinimumSpanningTree" to="." method="_on_btn_minimum_spanning_tree_pressed"]
+[connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/Btn1Tree" to="." method="_on_btn_1_tree_pressed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnLocalSearch2Opt" to="." method="_on_btn_local_search_2_opt_pressed"]

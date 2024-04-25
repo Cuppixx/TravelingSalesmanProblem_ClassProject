@@ -437,16 +437,75 @@ func _reverse_2opt_tour(vertex1:int,vertex2:int,tour:Array) -> Array:
 	
 	
 func _on_btn_minimum_spanning_tree_pressed():
-	build_mst([],[0,1,2,3,4,5,6,7])
+	var tour:Array = []
+	for i in range(graph_size): tour.append(i)
+	print(build_mst([],tour))
 	
 func build_mst(vertices_visited:Array,vertices_unvisited:Array,current_vertex:int = 0,tour:Array = []) -> Array:
 	vertices_visited.append(current_vertex)
+	tour.append(current_vertex)
 	vertices_unvisited.pop_at(vertices_unvisited.find(current_vertex))
-	var smallest_edge:int = INF
+	
+	var smallest_edge = INF
+	var next_vertex = INF
+	var _i = INF
 	for i in vertices_visited:
 		for j in vertices_unvisited:
 			if edge_weight_matrix[i][j] < smallest_edge:
 				smallest_edge = edge_weight_matrix[i][j]
-	return []
+				next_vertex = j
+				_i = i
+	 
+	_color_edge(Vector2(_i,next_vertex))
+	print("Smallest Edge: ",smallest_edge)
+	print("Next Vertex: ",next_vertex)
+	print("Tour: ",tour)
+	print("Visited:",vertices_visited)
+	print("Unvisted:",vertices_unvisited)
+	print("\n")
+	
+	if not vertices_unvisited.is_empty(): build_mst(vertices_visited,vertices_unvisited,next_vertex,tour)
+	else: return tour
+	
+	return tour
 
-#For Test Commit
+func _on_btn_1_tree_pressed():
+	var tour:Array = []
+	var excluded_vertex:int = 4
+	for i in range(graph_size): if i != excluded_vertex: tour.append(i)
+	tour = build_mst([],tour)
+	tour = build_1tree(tour,excluded_vertex)
+	print(tour)
+	
+	
+
+func build_1tree(tour:Array, excluded_vertex:int) -> Array:
+	print("Excluded: ",excluded_vertex)
+	
+	var edge_array:Array = edge_weight_matrix[excluded_vertex]
+	print("Array for Excluded: ",edge_array)
+	edge_array.pop_at(4)
+	print("Array for Excluded: ",edge_array)
+	
+	var minimum = edge_array.min()
+	edge_array.pop_at(edge_array.find(minimum))
+	print("Min: ",minimum)
+	
+	var minimum2 = edge_array.min()
+	print("Min2: ",minimum2)
+	
+	
+	#var smallest_edge = INF
+	#var _i = INF
+	#for j in 2:
+		#for i in tour:
+			#if i != _i:
+				#if edge_weight_matrix[i][excluded_vertex] < smallest_edge:
+					#smallest_edge = edge_weight_matrix[i][excluded_vertex]
+					#print(smallest_edge)
+					#_i = i
+		#print(Vector2(_i,excluded_vertex))
+		#_color_edge(Vector2(_i,excluded_vertex))
+		
+		
+	return []
