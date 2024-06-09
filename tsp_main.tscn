@@ -193,6 +193,9 @@ layout_mode = 2
 disabled = true
 text = "Local Search: Ant Colony"
 
+[node name="BtnWait" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
 [node name="HSplitContainer" type="HSplitContainer" parent="Control/HSplitContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -209,7 +212,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
 
 [node name="Label" type="Label" parent="Control/HSplitContainer/HSplitContainer/LeftPanel"]
 layout_mode = 0
@@ -237,7 +239,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
 
 [node name="Label" type="Label" parent="Control/HSplitContainer/HSplitContainer/RightPanel"]
 layout_mode = 0

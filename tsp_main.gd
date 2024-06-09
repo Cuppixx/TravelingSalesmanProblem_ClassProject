@@ -282,6 +282,7 @@ func _recursive_greedy_heuristic(edge_matrix:Array,vertex_visited1:Array,vertex_
 								minimum_edge = edge_matrix[i][j]
 								minimum_edge_pair = Vector2(i,j)
 								valid_edge_found = true
+						else: print("\n\n TEST\n\n")
 
 	if valid_edge_found:
 		edge_matrix[minimum_edge_pair.x][minimum_edge_pair.y] = INF
@@ -328,6 +329,7 @@ func _recursive_greedy_heuristic_variation(edge_matrix:Array,vertex_visited1:Arr
 								minimum_edge = edge_matrix[i][j]
 								minimum_edge_pair = Vector2(i,j)
 								valid_edge_found = true
+						else: print("\n\n TEST\n\n")
 
 	if valid_edge_found:
 		edge_matrix[minimum_edge_pair.x][minimum_edge_pair.y] = INF

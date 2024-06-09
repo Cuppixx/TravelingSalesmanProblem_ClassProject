@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Traveling Salesman Problem"
 config/version="1.0.0"
-config/tags=PackedStringArray("software")
+config/tags=PackedStringArray("software", "under_development")
 run/main_scene="res://tsp_main.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"

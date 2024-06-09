@@ -5,7 +5,7 @@
 [node name="Edge" type="Line2D"]
 texture_filter = 6
 texture_repeat = 1
-width = 5.0
+width = 8.0
 default_color = Color(0, 0.513726, 0.709804, 0.784314)
 antialiased = true
 script = ExtResource("1_c1610")
@@ -17,7 +17,7 @@ offset_bottom = 23.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.345098, 0.223529, 0.286275, 1)
 theme_override_constants/outline_size = 7
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 30
 horizontal_alignment = 1
 vertical_alignment = 1
 
