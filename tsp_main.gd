@@ -127,7 +127,6 @@ func _color_edge(edge:Vector2) -> void:
 				child.default_color = Color.FOREST_GREEN
 				child.get_child(0).get_child(0).color = Color.FOREST_GREEN
 
-#region _solve_tsp functions
 func _solve_tsp_manual() -> void:
 	var tour:Array = []
 	var start_index:int = 0
@@ -140,27 +139,8 @@ func _solve_tsp_manual() -> void:
 		if debug_print: print("Hand Solving Tour: ",tour)
 		if debug_print: print("Start Vertex: ",start_index)
 	)
-# Brute Force Methods
-func _solve_tsp_brute_force(algorithm:int) -> Array:
-	match algorithm:
-		0: return _recursive_brute_force_naive()
-		1: return _recursive_brute_force_branch_and_bound()
-		2: return _recursive_brute_force_held_karp()
-		_: return []
 
-# Nearest Neighbor Heuristics
-func _solve_tsp_nearest_neighbor_heuristic() -> Array: return _recursive_nearest_neighbor([],[],0,0)
-
-# Greedy Heuristics
-func _solve_tsp_greedy_heuristic(algorithm:int) -> Array:
-	match algorithm:
-		0: return _recursive_greedy_heuristic(edge_weight_matrix.duplicate(),[],[],[])
-		1: return _recursive_greedy_heuristic_variation(edge_weight_matrix.duplicate(),[],[],[])
-		_: return []
-#endregion
-
-#region Algorithm functions
-#region Brute Force Algorithms
+#region Algorithm Function
 func _recursive_brute_force_naive() -> Array:
 	var arr = []
 	for i in range(graph_size):
@@ -228,11 +208,6 @@ func factorial(n):
 			n = n-1
 	return holdvalue
 
-func _recursive_brute_force_branch_and_bound() -> Array: return []
-
-func _recursive_brute_force_held_karp() -> Array: return []
-#endregion
-#region Nearest Neighbor Algorithms
 func _recursive_nearest_neighbor(vertex_visited:Array,tour:Array,start_vertex:int,current_vertex:int) -> Array:
 	# Mark current vertex as visited and Add current vertex to tour
 	vertex_visited.append(current_vertex)
@@ -263,55 +238,7 @@ func _recursive_nearest_neighbor(vertex_visited:Array,tour:Array,start_vertex:in
 
 	# Return the final tour
 	return tour
-#endregion
-#region Greedy Algorithms
-func _recursive_greedy_heuristic(edge_matrix:Array,vertex_visited1:Array,vertex_visited2:Array,tour:Array) -> Array:
-	var minimum_edge:float = INF
-	var minimum_edge_pair:Vector2 = Vector2.INF
 
-	var valid_edge_found:bool = false
-	for i in range(len(edge_matrix)):
-		if not vertex_visited2.has(float(i)):
-			for j in range(len(edge_matrix)):
-				if not vertex_visited2.has(float(j)):
-					if i != j:
-						if edge_matrix[i][j] < minimum_edge:
-							var tour_copy:Array = tour.duplicate()
-							tour_copy.append(Vector2(i,j))
-							if _creates_invalid_cycle(tour_copy) == false:
-								minimum_edge = edge_matrix[i][j]
-								minimum_edge_pair = Vector2(i,j)
-								valid_edge_found = true
-						else: print("\n\n TEST\n\n")
-
-	if valid_edge_found:
-		edge_matrix[minimum_edge_pair.x][minimum_edge_pair.y] = INF
-		edge_matrix[minimum_edge_pair.y][minimum_edge_pair.x] = INF
-		tour.append(minimum_edge_pair)
-		_color_edge(minimum_edge_pair)
-
-		if not vertex_visited1.has(minimum_edge_pair.x): vertex_visited1.append(minimum_edge_pair.x)
-		elif not vertex_visited2.has(minimum_edge_pair.x): vertex_visited2.append(minimum_edge_pair.x)
-
-		if not vertex_visited1.has(minimum_edge_pair.y): vertex_visited1.append(minimum_edge_pair.y)
-		elif not vertex_visited2.has(minimum_edge_pair.y): vertex_visited2.append(minimum_edge_pair.y)
-
-		if debug_print:
-			print("Current Edge: ",minimum_edge_pair)
-			print("Vertex Visited 1: ",vertex_visited1)
-			print("Vertex Visited 2: ",vertex_visited2)
-			print("Edge Matrix: ",edge_matrix)
-			print("Tour: ",tour)
-			print("\n")
-
-		for i in range(len(edge_matrix)):
-				for j in range(len(edge_matrix)):
-					if edge_matrix[i][j] != INF and i != j:
-						_recursive_greedy_heuristic_variation(edge_matrix,vertex_visited1,vertex_visited2,tour)
-
-	return tour
-
-#region _recursive_greedy_heuristic_variation
 func _recursive_greedy_heuristic_variation(edge_matrix:Array,vertex_visited1:Array,vertex_visited2:Array,tour:Array) -> Array:
 	var minimum_edge:float = INF
 	var minimum_edge_pair:Vector2 = Vector2.INF
@@ -387,61 +314,6 @@ func _creates_invalid_cycle(tour:Array) -> bool:
 				tour_copy.pop_at(tour_copy.find(edge_to_pop))
 
 	return false
-#endregion
-#endregion
-#endregion
-
-#region GUI Signals
-func _on_btn_create_graph_pressed() -> void: _create_graph()
-
-func _on_spin_box_graph_changed(value: float) -> void:
-	match int(value):
-		0: current_graph = left_graph
-		1: current_graph = right_graph
-
-func _on_spin_box_size_changed(value: float) -> void: graph_size = int(value)
-func _on_spin_box_seed_changed(value: float) -> void: custom_seed = int(value)
-
-func _on_visibility_edgeweight_pressed() -> void: SignalEventBus.emit_signal("toggle_edgeweight_visibility")
-func _on_visibility_edge_pressed() -> void: SignalEventBus.emit_signal("toggle_none_tour_edges")
-
-func _on_btn_hand_solving_pressed() -> void:
-	SignalEventBus.emit_signal("hand_solving")
-	_solve_tsp_manual()
-func _on_btn_brute_force_pressed() -> void: print(_solve_tsp_brute_force(0))
-func _on_btn_nearest_neighbor_pressed() -> void: print(_solve_tsp_nearest_neighbor_heuristic())
-func _on_btn_greedy_heuristic_pressed() -> void: print(_solve_tsp_greedy_heuristic(0))
-func _on_btn_greedy_heuristic_variation_pressed() -> void: print(_solve_tsp_greedy_heuristic(1))
-
-#endregion
-func _on_btn_local_search_2_opt_pressed():
-	var tour:Array = [3,4,1,0,2,5,7,6]
-	print("Before: ",tour)
-	for i in range(1,len(tour)):
-		var reversed_tour = _reverse_2opt_tour(i,tour.size()-1,tour)
-		var sum:int = 0
-		for j in range(len(reversed_tour)):
-			if j < reversed_tour.size():
-				sum += edge_weight_matrix[j][j+1]
-		print("Sum: ",sum)
-
-func _reverse_2opt_tour(vertex1:int,vertex2:int,tour:Array) -> Array:
-	var vertex1_idx:int = INF
-	var vertex2_idx:int = INF
-	vertex1_idx = tour.find(vertex1)
-	vertex2_idx = tour.find(vertex2)
-	var tour_front:Array = tour.duplicate().slice(0,vertex1_idx)
-	var tour_back:Array = tour.duplicate().slice(vertex2_idx+1,tour.size())
-	tour = tour.slice(vertex1_idx,vertex2_idx+1)
-	tour.reverse()
-	print("After: ",tour_front," -- ",tour," -- ",tour_back)
-	return tour
-
-
-func _on_btn_minimum_spanning_tree_pressed():
-	var tour:Array = []
-	for i in range(graph_size): tour.append(i)
-	print(build_mst([],tour))
 
 func build_mst(vertices_visited:Array,vertices_unvisited:Array,current_vertex:int = 0,tour:Array = []) -> Array:
 	vertices_visited.append(current_vertex)
@@ -471,43 +343,65 @@ func build_mst(vertices_visited:Array,vertices_unvisited:Array,current_vertex:in
 
 	return tour
 
-func _on_btn_1_tree_pressed():
+func _reverse_2opt_tour(vertex1:int,vertex2:int,tour:Array) -> Array:
+	var vertex1_idx:int = INF
+	var vertex2_idx:int = INF
+	vertex1_idx = tour.find(vertex1)
+	vertex2_idx = tour.find(vertex2)
+	var tour_front:Array = tour.duplicate().slice(0,vertex1_idx)
+	var tour_back:Array = tour.duplicate().slice(vertex2_idx+1,tour.size())
+	tour = tour.slice(vertex1_idx,vertex2_idx+1)
+	tour.reverse()
+	print("After: ",tour_front," -- ",tour," -- ",tour_back)
+	return tour
+#endregion
+#region GUI Signals
+func _on_btn_create_graph_pressed() -> void:
+	_create_graph()
+
+func _on_spin_box_graph_changed(value: float) -> void:
+	match int(value):
+		0: current_graph = left_graph
+		1: current_graph = right_graph
+
+func _on_spin_box_size_changed(value: float) -> void:
+	graph_size = int(value)
+
+func _on_spin_box_seed_changed(value: float) -> void:
+	custom_seed = int(value)
+
+func _on_visibility_edgeweight_pressed() -> void:
+	SignalEventBus.emit_signal("toggle_edgeweight_visibility")
+
+func _on_visibility_edge_pressed() -> void:
+	SignalEventBus.emit_signal("toggle_none_tour_edges")
+
+func _on_btn_hand_solving_pressed() -> void:
+	SignalEventBus.emit_signal("hand_solving")
+	_solve_tsp_manual()
+
+func _on_btn_brute_force_pressed() -> void:
+	print(_recursive_brute_force_naive())
+
+func _on_btn_nearest_neighbor_pressed() -> void:
+	print(_recursive_nearest_neighbor([],[],0,0))
+
+func _on_btn_greedy_heuristic_variation_pressed() -> void:
+	print(_recursive_greedy_heuristic_variation(edge_weight_matrix.duplicate(),[],[],[]))
+
+func _on_btn_minimum_spanning_tree_pressed():
 	var tour:Array = []
-	var excluded_vertex:int = 4
-	for i in range(graph_size): if i != excluded_vertex: tour.append(i)
-	tour = build_mst([],tour)
-	tour = build_1tree(tour,excluded_vertex)
-	print(tour)
+	for i in range(graph_size): tour.append(i)
+	print(build_mst([],tour))
 
-
-
-func build_1tree(tour:Array, excluded_vertex:int) -> Array:
-	print("Excluded: ",excluded_vertex)
-
-	var edge_array:Array = edge_weight_matrix[excluded_vertex]
-	print("Array for Excluded: ",edge_array)
-	edge_array.pop_at(4)
-	print("Array for Excluded: ",edge_array)
-
-	var minimum = edge_array.min()
-	edge_array.pop_at(edge_array.find(minimum))
-	print("Min: ",minimum)
-
-	var minimum2 = edge_array.min()
-	print("Min2: ",minimum2)
-
-
-	#var smallest_edge = INF
-	#var _i = INF
-	#for j in 2:
-		#for i in tour:
-			#if i != _i:
-				#if edge_weight_matrix[i][excluded_vertex] < smallest_edge:
-					#smallest_edge = edge_weight_matrix[i][excluded_vertex]
-					#print(smallest_edge)
-					#_i = i
-		#print(Vector2(_i,excluded_vertex))
-		#_color_edge(Vector2(_i,excluded_vertex))
-
-
-	return []
+func _on_btn_local_search_2_opt_pressed():
+	var tour:Array = [3,4,1,0,2,5,7,6]
+	print("Before: ",tour)
+	for i in range(1,len(tour)):
+		var reversed_tour = _reverse_2opt_tour(i,tour.size()-1,tour)
+		var sum:int = 0
+		for j in range(len(reversed_tour)):
+			if j < reversed_tour.size():
+				sum += edge_weight_matrix[j][j+1]
+		print("Sum: ",sum)
+#endregion

@@ -91,18 +91,6 @@ flat = true
 [node name="HSeparator2" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="LabelAssumptions" type="RichTextLabel" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Three Assumptions that hold true in most practical TSP applications.
-1. Complete Graph (An Edge exists between every Pair of Vertices)
-2. Symmetric TSP (Distance from Vertex A to B is the same length as Vertex B to A)
-3. Triangle Inequality (0 -> 3 always less than 0 -> 2 -> 3)"
-fit_content = true
-scroll_active = false
-
-[node name="HSeparator3" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
 [node name="BtnHandSolving" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Manual Solving"
@@ -114,16 +102,6 @@ layout_mode = 2
 layout_mode = 2
 text = "Brute Force Algorithm (Naive Brute Force) "
 
-[node name="BtnBruteForce2" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-disabled = true
-text = "Brute Force Algorithm (Branch and Bound Brute Force) "
-
-[node name="BtnBruteForce3" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-disabled = true
-text = "Held-Karp Algorithm (Branch and Bound Brute Force and Dynamic Programming) "
-
 [node name="HSeparator5" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
@@ -133,11 +111,6 @@ text = "Nearest Neighbor Algorithm (Nearest Neighbor Heuristic)"
 
 [node name="HSeparator6" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
-
-[node name="BtnGreedyHeuristic" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-disabled = true
-text = "Greedy Algorithm (Greedy Heuristic)"
 
 [node name="BtnGreedyHeuristicVariation" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -150,51 +123,17 @@ layout_mode = 2
 layout_mode = 2
 text = "Create Minimum Spanning Tree (Prim's Algorithm (Greedy Heuristic))"
 
-[node name="Btn1Tree" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Create 1-Tree (Prim's Algorithm [Variation] (Greedy Heuristic))"
-
 [node name="HSeparator8" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="BtnChristofidesMethod" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Christofides Algorithm (Constructive Heuristic(Greedy Heuristic + Local Search Methods))"
-
-[node name="BtnLinKernighanMethod" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Lin-Kernighan Algorithm (Constructive Heuristic(Greedy Heuristic + Local Search Methods))"
-
-[node name="HSeparator9" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="BtnLocalSearchRandomSwapping" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
+disabled = true
 text = "Local Search: Random Swapping "
 
 [node name="BtnLocalSearch2Opt" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Local Search: 2-Opt"
-
-[node name="BtnLocalSearch3Opt" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-disabled = true
-text = "Local Search: 3-Opt"
-
-[node name="HSeparator10" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="BtnSimulatedAnnealing" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Local Search: Simulated Annealing"
-
-[node name="BtnAntColony" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
-disabled = true
-text = "Local Search: Ant Colony"
-
-[node name="BtnWait" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-layout_mode = 2
 
 [node name="HSplitContainer" type="HSplitContainer" parent="Control/HSplitContainer"]
 layout_mode = 2
@@ -263,8 +202,6 @@ grow_vertical = 2
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnHandSolving" to="." method="_on_btn_hand_solving_pressed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnBruteForce" to="." method="_on_btn_brute_force_pressed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnNearestNeighbor" to="." method="_on_btn_nearest_neighbor_pressed"]
-[connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnGreedyHeuristic" to="." method="_on_btn_greedy_heuristic_pressed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnGreedyHeuristicVariation" to="." method="_on_btn_greedy_heuristic_variation_pressed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnMinimumSpanningTree" to="." method="_on_btn_minimum_spanning_tree_pressed"]
-[connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/Btn1Tree" to="." method="_on_btn_1_tree_pressed"]
 [connection signal="pressed" from="Control/HSplitContainer/UI/MarginContainer/VBoxContainer/BtnLocalSearch2Opt" to="." method="_on_btn_local_search_2_opt_pressed"]
