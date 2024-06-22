@@ -413,5 +413,5 @@ func _on_btn_local_search_2_opt_pressed():
 func _on_button_pressed() -> void:
 	var r = float($Control/HSplitContainer/HSplitContainer/RightPanel/Label2.text)
 	var l = float($Control/HSplitContainer/HSplitContainer/LeftPanel/Label2.text)
-	print("Lower Bound: ",r / l)
+	$Control/HSplitContainer/UI/MarginContainer/VBoxContainer/Label2.text = "Lower Bound: " + str(r / l)
 #endregion

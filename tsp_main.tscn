@@ -128,6 +128,9 @@ text = "Create Minimum Spanning Tree (Prim's Algorithm (Greedy Heuristic))"
 layout_mode = 2
 text = "Get Percentage"
 
+[node name="Label2" type="Label" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
 [node name="HSeparator8" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
