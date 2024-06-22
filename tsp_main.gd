@@ -32,6 +32,7 @@ const panel_margin:Vector2 = Vector2(10,10)
 var panel_size:Vector2 # Panel size gets calculated, dont set
 var rng:RandomNumberGenerator = RandomNumberGenerator.new()
 var edge_weight_matrix = []
+var new_graph:bool = false
 #endregion
 
 func _ready() -> void:
@@ -52,6 +53,7 @@ func _load_default_config() -> void: # Load default config from code to ui eleme
 	graph_seed_spinbox.value = custom_seed
 
 func _create_graph() -> void:
+	new_graph = true
 	rng.randomize()
 	rng.set_seed(custom_seed)
 
@@ -120,6 +122,13 @@ func _create_graph() -> void:
 			current_graph.add_child(edge_instance)
 
 func _color_edge(edge:Vector2) -> void:
+	var length_label = current_graph.get_parent().get_node("Label2")
+	if length_label.text == "" or new_graph == true:
+		new_graph = false
+		length_label.text = "0"
+	if not edge.x == INF or not edge.y == INF:
+		length_label.text = str(float(length_label.text) + edge_weight_matrix[edge.x][edge.y])
+
 	for child in current_graph.get_children():
 		if child is Edge:
 			var inverse_edge:Vector2 = Vector2(edge.y,edge.x)
@@ -148,7 +157,6 @@ func _recursive_brute_force_naive() -> Array:
 	var permuations_arr = permutations(arr)
 	for i in range(len(permuations_arr)):
 		permuations_arr[i].append(permuations_arr[i].front())
-	#print(permuations_arr)
 
 	var final_sum = INF
 	var current_i
@@ -161,11 +169,9 @@ func _recursive_brute_force_naive() -> Array:
 		if sum < final_sum:
 			final_sum = sum
 			current_i = i
-			print("New Minimum:",permuations_arr[i]," Value:",final_sum)
 
 	for j in range(len(permuations_arr[current_i])):
 		if j != permuations_arr[current_i].size()-1:
-			#print("Color:",Vector2(permuations_arr[current_i][j],permuations_arr[current_i][j+1]))
 			_color_edge(Vector2(permuations_arr[current_i][j],permuations_arr[current_i][j+1]))
 	return [permuations_arr[current_i]]
 
@@ -256,13 +262,12 @@ func _recursive_greedy_heuristic_variation(edge_matrix:Array,vertex_visited1:Arr
 								minimum_edge = edge_matrix[i][j]
 								minimum_edge_pair = Vector2(i,j)
 								valid_edge_found = true
-						else: print("\n\n TEST\n\n")
 
 	if valid_edge_found:
+		_color_edge(minimum_edge_pair)
 		edge_matrix[minimum_edge_pair.x][minimum_edge_pair.y] = INF
 		edge_matrix[minimum_edge_pair.y][minimum_edge_pair.x] = INF
 		tour.append(minimum_edge_pair)
-		_color_edge(minimum_edge_pair)
 
 		if not vertex_visited1.has(minimum_edge_pair.x): vertex_visited1.append(minimum_edge_pair.x)
 		elif not vertex_visited2.has(minimum_edge_pair.x): vertex_visited2.append(minimum_edge_pair.x)
@@ -331,12 +336,13 @@ func build_mst(vertices_visited:Array,vertices_unvisited:Array,current_vertex:in
 				_i = i
 
 	_color_edge(Vector2(_i,next_vertex))
-	print("Smallest Edge: ",smallest_edge)
-	print("Next Vertex: ",next_vertex)
-	print("Tour: ",tour)
-	print("Visited:",vertices_visited)
-	print("Unvisted:",vertices_unvisited)
-	print("\n")
+	if debug_print:
+		print("Smallest Edge: ",smallest_edge)
+		print("Next Vertex: ",next_vertex)
+		print("Tour: ",tour)
+		print("Visited:",vertices_visited)
+		print("Unvisted:",vertices_unvisited)
+		print("\n")
 
 	if not vertices_unvisited.is_empty(): build_mst(vertices_visited,vertices_unvisited,next_vertex,tour)
 	else: return tour
@@ -352,7 +358,7 @@ func _reverse_2opt_tour(vertex1:int,vertex2:int,tour:Array) -> Array:
 	var tour_back:Array = tour.duplicate().slice(vertex2_idx+1,tour.size())
 	tour = tour.slice(vertex1_idx,vertex2_idx+1)
 	tour.reverse()
-	print("After: ",tour_front," -- ",tour," -- ",tour_back)
+	if debug_print: print("After: ",tour_front," -- ",tour," -- ",tour_back)
 	return tour
 #endregion
 #region GUI Signals
@@ -396,12 +402,16 @@ func _on_btn_minimum_spanning_tree_pressed():
 
 func _on_btn_local_search_2_opt_pressed():
 	var tour:Array = [3,4,1,0,2,5,7,6]
-	print("Before: ",tour)
+	if debug_print: print("Before: ",tour)
 	for i in range(1,len(tour)):
 		var reversed_tour = _reverse_2opt_tour(i,tour.size()-1,tour)
 		var sum:int = 0
 		for j in range(len(reversed_tour)):
 			if j < reversed_tour.size():
 				sum += edge_weight_matrix[j][j+1]
-		print("Sum: ",sum)
+
+func _on_button_pressed() -> void:
+	var r = float($Control/HSplitContainer/HSplitContainer/RightPanel/Label2.text)
+	var l = float($Control/HSplitContainer/HSplitContainer/LeftPanel/Label2.text)
+	print("Lower Bound: ",r / l)
 #endregion
