@@ -1,5 +1,7 @@
 # TravelingSalesmanProblem_ClassProject
 
+**WIP / Only Proof Of Concept**
+
 ## Overview
 
 The TSP Class Project consists of a collection of algorithms I implemented based solely on the algorithm descriptions. It’s not intended to function as a full-fledged piece of software; rather, it serves as a proof of concept to demonstrate my understanding of the algorithms. There’s also the added bonus that you can view and experiment with them a bit during runtime.
