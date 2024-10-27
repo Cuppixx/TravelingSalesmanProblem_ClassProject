@@ -134,12 +134,6 @@ layout_mode = 2
 [node name="HSeparator8" type="HSeparator" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="BtnLocalSearchRandomSwapping" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-disabled = true
-text = "Local Search: Random Swapping "
-
 [node name="BtnLocalSearch2Opt" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Local Search: 2-Opt"

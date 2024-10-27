@@ -1,39 +1,33 @@
 class_name TravelingSalesmanProblemMain extends Node
 @export_category("TSP")
 
-#region Debug
 @export_group("Debug Settings")
 @export var debug_print:bool = true
-#endregion
-#region References
+
 @onready var left_graph:Control = $Control/HSplitContainer/HSplitContainer/LeftPanel/Graph
 @onready var right_graph:Control = $Control/HSplitContainer/HSplitContainer/RightPanel/Graph
 
 @onready var graph_selection_spinbox:SpinBox = $Control/HSplitContainer/UI/MarginContainer/VBoxContainer/SpinBoxGraph
 @onready var graph_size_spinbox:SpinBox = $Control/HSplitContainer/UI/MarginContainer/VBoxContainer/SpinBoxSize
 @onready var graph_seed_spinbox:SpinBox = $Control/HSplitContainer/UI/MarginContainer/VBoxContainer/SpinBoxSeed
-#endregion
-#region Resources
+
 const VERTEX:Resource = preload("res://vertex.tscn")
 const EDGE:Resource = preload("res://edge.tscn")
-#endregion
-#region Constants
+
 const panel_margin:Vector2 = Vector2(10,10)
-#endregion
-#region Exports
+
 @export_group("Graph Settings")
 @export var vertex_spacing:int = 150
 
 @export var current_graph:Control = right_graph
 @export var custom_seed:int = 18
 @export var graph_size:int = 5
-#endregion
-#regions Variables
+
 var panel_size:Vector2 # Panel size gets calculated, dont set
 var rng:RandomNumberGenerator = RandomNumberGenerator.new()
 var edge_weight_matrix = []
 var new_graph:bool = false
-#endregion
+
 
 func _ready() -> void:
 	panel_size = DisplayServer.window_get_size()
@@ -46,11 +40,14 @@ func _ready() -> void:
 	_load_default_config()
 
 	vertex_instance.queue_free()
+
+
 func _load_default_config() -> void: # Load default config from code to ui elements
 	if current_graph == left_graph: graph_selection_spinbox.value = 0
 	else: graph_selection_spinbox.value = 1
 	graph_size_spinbox.value = graph_size
 	graph_seed_spinbox.value = custom_seed
+
 
 func _create_graph() -> void:
 	new_graph = true
@@ -121,6 +118,7 @@ func _create_graph() -> void:
 			edge_label.position.x -= edge_label.text.length() * 2
 			current_graph.add_child(edge_instance)
 
+
 func _color_edge(edge:Vector2) -> void:
 	var length_label = current_graph.get_parent().get_node("Label2")
 	if length_label.text == "" or new_graph == true:
@@ -136,6 +134,7 @@ func _color_edge(edge:Vector2) -> void:
 				child.default_color = Color.FOREST_GREEN
 				child.get_child(0).get_child(0).color = Color.FOREST_GREEN
 
+
 func _solve_tsp_manual() -> void:
 	var tour:Array = []
 	var start_index:int = 0
@@ -148,6 +147,7 @@ func _solve_tsp_manual() -> void:
 		if debug_print: print("Hand Solving Tour: ",tour)
 		if debug_print: print("Start Vertex: ",start_index)
 	)
+
 
 #region Algorithm Function
 func _recursive_brute_force_naive() -> Array:
@@ -175,6 +175,7 @@ func _recursive_brute_force_naive() -> Array:
 			_color_edge(Vector2(permuations_arr[current_i][j],permuations_arr[current_i][j+1]))
 	return [permuations_arr[current_i]]
 
+
 func permutations(array,permuations_array = [],start=0):
 	var n = array.size()
 
@@ -199,6 +200,7 @@ func permutations(array,permuations_array = [],start=0):
 	if permuations_array.size() == factorial(array.size()):
 		return permuations_array
 
+
 func factorial(n):
 	var holdvalue = 0
 	var boolis = true
@@ -213,6 +215,7 @@ func factorial(n):
 				holdvalue = holdvalue * n
 			n = n-1
 	return holdvalue
+
 
 func _recursive_nearest_neighbor(vertex_visited:Array,tour:Array,start_vertex:int,current_vertex:int) -> Array:
 	# Mark current vertex as visited and Add current vertex to tour
@@ -244,6 +247,7 @@ func _recursive_nearest_neighbor(vertex_visited:Array,tour:Array,start_vertex:in
 
 	# Return the final tour
 	return tour
+
 
 func _recursive_greedy_heuristic_variation(edge_matrix:Array,vertex_visited1:Array,vertex_visited2:Array,tour:Array) -> Array:
 	var minimum_edge:float = INF
@@ -290,6 +294,7 @@ func _recursive_greedy_heuristic_variation(edge_matrix:Array,vertex_visited1:Arr
 
 	return tour
 
+
 func _creates_invalid_cycle(tour:Array) -> bool:
 	if debug_print: print("Checking for invalid cycles ... on tour: ",tour)
 	if len(tour) == len(edge_weight_matrix) or len(tour) < 3:
@@ -320,6 +325,7 @@ func _creates_invalid_cycle(tour:Array) -> bool:
 
 	return false
 
+
 func build_mst(vertices_visited:Array,vertices_unvisited:Array,current_vertex:int = 0,tour:Array = []) -> Array:
 	vertices_visited.append(current_vertex)
 	tour.append(current_vertex)
@@ -349,6 +355,7 @@ func build_mst(vertices_visited:Array,vertices_unvisited:Array,current_vertex:in
 
 	return tour
 
+
 func _reverse_2opt_tour(vertex1:int,vertex2:int,tour:Array) -> Array:
 	var vertex1_idx:int = INF
 	var vertex2_idx:int = INF
@@ -361,44 +368,57 @@ func _reverse_2opt_tour(vertex1:int,vertex2:int,tour:Array) -> Array:
 	if debug_print: print("After: ",tour_front," -- ",tour," -- ",tour_back)
 	return tour
 #endregion
+
+
 #region GUI Signals
 func _on_btn_create_graph_pressed() -> void:
 	_create_graph()
+
 
 func _on_spin_box_graph_changed(value: float) -> void:
 	match int(value):
 		0: current_graph = left_graph
 		1: current_graph = right_graph
 
+
 func _on_spin_box_size_changed(value: float) -> void:
 	graph_size = int(value)
+
 
 func _on_spin_box_seed_changed(value: float) -> void:
 	custom_seed = int(value)
 
+
 func _on_visibility_edgeweight_pressed() -> void:
 	SignalEventBus.emit_signal("toggle_edgeweight_visibility")
 
+
 func _on_visibility_edge_pressed() -> void:
 	SignalEventBus.emit_signal("toggle_none_tour_edges")
+
 
 func _on_btn_hand_solving_pressed() -> void:
 	SignalEventBus.emit_signal("hand_solving")
 	_solve_tsp_manual()
 
+
 func _on_btn_brute_force_pressed() -> void:
 	print(_recursive_brute_force_naive())
+
 
 func _on_btn_nearest_neighbor_pressed() -> void:
 	print(_recursive_nearest_neighbor([],[],0,0))
 
+
 func _on_btn_greedy_heuristic_variation_pressed() -> void:
 	print(_recursive_greedy_heuristic_variation(edge_weight_matrix.duplicate(),[],[],[]))
+
 
 func _on_btn_minimum_spanning_tree_pressed():
 	var tour:Array = []
 	for i in range(graph_size): tour.append(i)
 	print(build_mst([],tour))
+
 
 func _on_btn_local_search_2_opt_pressed():
 	var tour:Array = [3,4,1,0,2,5,7,6]
@@ -409,6 +429,7 @@ func _on_btn_local_search_2_opt_pressed():
 		for j in range(len(reversed_tour)):
 			if j < reversed_tour.size():
 				sum += edge_weight_matrix[j][j+1]
+
 
 func _on_button_pressed() -> void:
 	var r = float($Control/HSplitContainer/HSplitContainer/RightPanel/Label2.text)
