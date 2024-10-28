@@ -7,6 +7,7 @@ script = ExtResource("1_205di")
 current_graph = NodePath("Control/HSplitContainer/HSplitContainer/RightPanel/Graph")
 
 [node name="Control" type="Control" parent="."]
+texture_filter = 4
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -49,6 +50,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 18
 text = "Traveling Salesman Problem"
 
 [node name="BtnCreateGraph" type="Button" parent="Control/HSplitContainer/UI/MarginContainer/VBoxContainer"]
