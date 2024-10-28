@@ -1,6 +1,6 @@
 # TravelingSalesmanProblem_ClassProject
 
-**WIP / Only Proof Of Concept**
+**WIP / Demo (Proof Of Concept)**
 
 ## Overview
 
